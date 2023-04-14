@@ -16,4 +16,7 @@ COPY ./symfony.lock /var/www/symfony.lock
 
 RUN composer install --no-dev --optimize-autoloader
 
+RUN chmod -R 1775 /var/www; \
+    chown -R www-data:www-data /var/www;
+
 CMD ["php", "./public/index.php"]

@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+    api:
+        image: api:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            GITHUB_API_TOKEN: ~
+            SPACE_CLIENT_ID: ~
+            SPACE_CLIENT_SECRET: ~
+        ports:
+            - "80:8080"

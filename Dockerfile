@@ -13,6 +13,7 @@ COPY ./.env /var/www/.env
 COPY ./composer.json /var/www/composer.json
 COPY ./composer.lock /var/www/composer.lock
 COPY ./symfony.lock /var/www/symfony.lock
+COPY ./secrets /var/www/secrets
 
 RUN composer install --no-dev --optimize-autoloader
 

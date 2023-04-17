@@ -1,0 +1,9 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        default.storage:
+            adapter: 'asyncaws'
+            options:
+                client: 'cache_s3_client' # The service ID of the AsyncAws\S3\S3Client instance
+                bucket: 'jetbrains-space-github-cache'
+                prefix: 'cache'

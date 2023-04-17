@@ -10,11 +10,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class UserEmailAddressFinder
 {
-    private const URL  = 'https://eonx.jetbrains.space/api/http/team-directory/profiles/id:%s?$fields=emails';
+    private const URL = 'https://eonx.jetbrains.space/api/http/team-directory/profiles/id:%s?$fields=emails';
 
     public function __construct(
         private readonly AccessTokenProvider $accessTokenProvider,
-        private readonly CacheInterface $cache,
+        private readonly CacheInterface $flysystemCache,
         private readonly HttpClientInterface $httpClient
     ){
     }
@@ -26,7 +26,7 @@ final class UserEmailAddressFinder
     {
         $key = \sprintf('space_user_email_%s', $id);
 
-        return $this->cache->get($key, function (ItemInterface $item) use ($id): ?string {
+        return $this->flysystemCache->get($key, function (ItemInterface $item) use ($id): ?string {
             $response = $this->httpClient->request('GET', \sprintf(self::URL, $id), [
                 'auth_bearer' => $this->accessTokenProvider->getAccessToken(),
             ])->toArray();

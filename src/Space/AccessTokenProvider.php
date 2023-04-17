@@ -13,7 +13,7 @@ final class AccessTokenProvider
     private const URL = 'https://eonx.jetbrains.space/oauth/token';
 
     public function __construct(
-        private readonly CacheInterface $cache,
+        private readonly CacheInterface $flysystemCache,
         private readonly HttpClientInterface $httpClient,
         private readonly string $spaceClientId,
         private readonly string $spaceClientSecret
@@ -25,7 +25,7 @@ final class AccessTokenProvider
      */
     public function getAccessToken(): string
     {
-        return $this->cache->get('space_access_token', function (ItemInterface $item): string {
+        return $this->flysystemCache->get('space_access_token', function (ItemInterface $item): string {
             $response = $this->httpClient->request('POST', self::URL, [
                 'auth_basic' => [$this->spaceClientId, $this->spaceClientSecret],
                 'body' => [

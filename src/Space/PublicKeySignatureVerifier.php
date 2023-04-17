@@ -17,7 +17,7 @@ final class PublicKeySignatureVerifier
 
     public function __construct(
         private readonly AccessTokenProvider $accessTokenProvider,
-        private readonly CacheInterface $cache,
+        private readonly CacheInterface $flysystemCache,
         private readonly HttpClientInterface $httpClient,
         private readonly string $spaceClientId
     ){
@@ -58,7 +58,7 @@ final class PublicKeySignatureVerifier
      */
     private function getPublicKeys(): array
     {
-        return JWK::parseKeySet($this->cache->get('space_public_keys', function (ItemInterface $item): array {
+        return JWK::parseKeySet($this->flysystemCache->get('space_public_keys', function (ItemInterface $item): array {
             $item->expiresAfter(3600);
 
             $url = \sprintf(self::URL, $this->spaceClientId);

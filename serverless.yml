@@ -1,0 +1,41 @@
+service: jetbrains-space-github-review-app
+
+plugins:
+  - ./vendor/runtime/bref-layer
+
+provider:
+  name: aws
+  region: ap-southeast-2
+  runtime: provided.al2
+  memorySize: 512
+  timeout: 60
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: s3:*
+          Resource: 'arn:aws:s3:::jetbrains-space-github-cache/*'
+  environment:
+    APP_ENV: prod
+    APP_RUNTIME: Runtime\Bref\Runtime
+    BREF_LOOP_MAX: 100
+    GITHUB_ACCESS_TOKEN: ${ssm:/app/env/GITHUB_ACCESS_TOKEN}
+    GITHUB_CLIENT_ID: ${ssm:/app/env/GITHUB_CLIENT_ID}
+    GITHUB_CLIENT_SECRET: ${ssm:/app/env/GITHUB_CLIENT_SECRET}
+    SPACE_CLIENT_ID: ${ssm:/app/env/SPACE_CLIENT_ID}
+    SPACE_CLIENT_SECRET: ${ssm:/app/env/SPACE_CLIENT_SECRET}
+
+functions:
+  website:
+    handler: public/index.php
+    layers:
+      - ${runtime-bref:php-81}
+    events:
+      - httpApi: '*'
+
+resources:
+  Resources:
+    CacheBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: jetbrains-space-github-cache

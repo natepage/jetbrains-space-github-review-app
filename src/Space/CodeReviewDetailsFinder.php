@@ -17,7 +17,7 @@ final class CodeReviewDetailsFinder
 
     public function __construct(
         private readonly AccessTokenProvider $accessTokenProvider,
-        private readonly CacheInterface $cache,
+        private readonly CacheInterface $flysystemCache,
         private readonly HttpClientInterface $httpClient
     ){
     }
@@ -29,7 +29,7 @@ final class CodeReviewDetailsFinder
     {
         $key = \sprintf('space_code_review_%s', $id);
 
-        return $this->cache->get($key, function (ItemInterface $item) use ($id): array {
+        return $this->flysystemCache->get($key, function (ItemInterface $item) use ($id): array {
             $projects = $this->getProjects();
 
             foreach ($projects as $projectId) {
@@ -70,7 +70,7 @@ final class CodeReviewDetailsFinder
      */
     private function getProjects(): array
     {
-        return $this->cache->get('space_projects', function (ItemInterface $item): array {
+        return $this->flysystemCache->get('space_projects', function (ItemInterface $item): array {
             $response = $this->httpClient->request('GET', self::PROJECTS_URL, [
                 'auth_bearer' => $this->accessTokenProvider->getAccessToken(),
             ])->toArray();

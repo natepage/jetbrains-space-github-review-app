@@ -14,7 +14,8 @@ final class UsernameFinder
     private const URL = 'https://api.github.com/repos/eonx-com/github-repositories/contents/config/people/users/users.yml';
 
     public function __construct(
-        private readonly CacheInterface $cache,
+        private readonly string $githubAccessToken,
+        private readonly CacheInterface $flysystemCache,
         private readonly HttpClientInterface $githubClient
     ) {
     }
@@ -38,10 +39,12 @@ final class UsernameFinder
      */
     private function getMapping(): array
     {
-        return $this->cache->get('github_username_mapping', function (ItemInterface $item): array {
+        return $this->flysystemCache->get('github_username_mapping', function (ItemInterface $item): array {
             $item->expiresAfter(3600);
 
-            $response = $this->githubClient->request('GET', self::URL);
+            $response = $this->githubClient->request('GET', self::URL, [
+                'auth_bearer' => $this->githubAccessToken,
+            ]);
 
             return Yaml::parse(\base64_decode($response->toArray()['content']));
         });

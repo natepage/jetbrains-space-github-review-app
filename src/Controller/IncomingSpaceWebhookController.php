@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Github\PullRequestReviewFactory as GithubPullRequestReviewFactory;
+use App\Github\UserAccessTokenFinder as GithubUserAccessTokenFinder;
 use App\Github\UsernameFinder as GithubUsernameFinder;
 use App\Space\CodeReviewDetailsFinder as SpaceCodeReviewDetailsFinder;
 use App\Space\PublicKeySignatureVerifier as SpacePublicKeySignatureVerifier;
@@ -25,6 +26,7 @@ final class IncomingSpaceWebhookController extends AbstractController
         private readonly SpaceUserEmailAddressFinder $emailAddressFinder,
         private readonly GithubUsernameFinder $usernameFinder,
         private readonly GithubPullRequestReviewFactory $pullRequestReviewFactory,
+        private readonly GithubUserAccessTokenFinder $userAccessTokenFinder,
     ) {
     }
 
@@ -46,8 +48,11 @@ final class IncomingSpaceWebhookController extends AbstractController
             // Resolve participant GitHub username from GitHub API
             $review['github']['username'] = $this->usernameFinder->findByEmail($email);
 
+            // Resolve GitHub access token for participant
+            $accessToken = $this->userAccessTokenFinder->findByUsername($review['github']['username']);
+
             // Create review on GitHub
-            $this->pullRequestReviewFactory->createReview($review);
+            $this->pullRequestReviewFactory->createReview($review, $accessToken);
         });
     }
 

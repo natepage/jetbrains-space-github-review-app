@@ -34,9 +34,11 @@ final class PullRequestReviewFactory
 
     private function getBody(array $data, bool $isDefaultToken): string
     {
+        $approved = $isDefaultToken ? 'Approved' : \sprintf('@%s approved', $data['github']['username']);
+
         return \sprintf(
-            "%sapproved 👌 | [Space - %s](%s).",
-            $isDefaultToken ? '@' . $data['github']['username'] . ' ' : '',
+            "% 👌 | [Space - %s](%s).",
+            $approved,
             $data['space']['number'],
             $data['space']['url'],
         );

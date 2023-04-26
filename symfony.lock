@@ -1,4 +1,7 @@
 {
+    "eonx-com/easy-bugsnag": {
+        "version": "4.3.17"
+    },
     "eonx-com/easy-utils": {
         "version": "4.3.17"
     },

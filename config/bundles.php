@@ -6,4 +6,5 @@ return [
     KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle::class => ['all' => true],
     EonX\EasyEncryption\Bridge\Symfony\EasyEncryptionSymfonyBundle::class => ['all' => true],
     EonX\EasyUtils\Bridge\Symfony\EasyUtilsSymfonyBundle::class => ['all' => true],
+    EonX\EasyBugsnag\Bridge\Symfony\EasyBugsnagSymfonyBundle::class => ['all' => true],
 ];

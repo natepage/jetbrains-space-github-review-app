@@ -10,8 +10,6 @@ use App\Space\CodeReviewDetailsFinder as SpaceCodeReviewDetailsFinder;
 use App\Space\PublicKeySignatureVerifier as SpacePublicKeySignatureVerifier;
 use App\Space\UserEmailAddressFinder as SpaceUserEmailAddressFinder;
 use App\Space\WebhookPayloadValidator as SpaceWebhookPayloadValidator;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +30,7 @@ final class IncomingSpaceWebhookController extends AbstractController
 
     public function __invoke(Request $request): Response
     {
-        return $this->handleApiResponse(function () use ($request) {
+        return $this->handleApiResponse(function () use ($request): void {
             // Make sure request is coming from Space
             $this->publicKeySignatureVerifier->isSignatureValidForRequest($request);
 
@@ -54,16 +52,5 @@ final class IncomingSpaceWebhookController extends AbstractController
             // Create review on GitHub
             $this->pullRequestReviewFactory->createReview($review, $accessToken);
         });
-    }
-
-    private function handleApiResponse(callable $func): Response
-    {
-        try {
-            $func();
-        } catch (\Throwable $throwable) {
-            return new JsonResponse(['message' => $throwable->getMessage()], Response::HTTP_BAD_REQUEST);
-        }
-
-        return new JsonResponse(['message' => 'OK'], Response::HTTP_OK);
     }
 }

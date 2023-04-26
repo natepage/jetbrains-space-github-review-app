@@ -19,6 +19,7 @@ provider:
     APP_ENV: prod
     APP_RUNTIME: Runtime\Bref\Runtime
     BREF_LOOP_MAX: 100
+    BUGSNAG_API_KEY: ${ssm:/app/env/BUGSNAG_API_KEY}
     GITHUB_ACCESS_TOKEN: ${ssm:/app/env/GITHUB_ACCESS_TOKEN}
     GITHUB_CLIENT_ID: ${ssm:/app/env/GITHUB_CLIENT_ID}
     GITHUB_CLIENT_SECRET: ${ssm:/app/env/GITHUB_CLIENT_SECRET}

@@ -1,7 +1,9 @@
 knpu_oauth2_client:
     clients:
         github:
-            type: github
+            type: generic
+            provider_class: App\Infrastructure\OAuth\NoEmailGitHubProvider
+            client_class: KnpU\OAuth2ClientBundle\Client\Provider\GithubClient
             client_id: '%env(GITHUB_CLIENT_ID)%'
             client_secret: '%env(GITHUB_CLIENT_SECRET)%'
             redirect_route: oauth_github_check

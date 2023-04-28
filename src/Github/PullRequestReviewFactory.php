@@ -37,7 +37,7 @@ final class PullRequestReviewFactory
         $approved = $isDefaultToken ? 'Approved' : \sprintf('@%s approved', $data['github']['username']);
 
         return \sprintf(
-            "% 👌 | [Space - %s](%s).",
+            "%s 👌 | [Space - %s](%s).",
             $approved,
             $data['space']['number'],
             $data['space']['url'],

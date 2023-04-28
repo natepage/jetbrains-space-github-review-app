@@ -24,7 +24,7 @@ final class OauthGithubInitController extends AbstractController
         return $this->handleApiResponse(function (): Response {
             $scopes = ['user', 'repo'];
 
-            $stateKeyId = \sprintf('oauth_github_state_%s', \bin2hex(\random_bytes(16)));
+            $stateKeyId = \sprintf('oauth_github_state_%s_%s', \bin2hex(\random_bytes(16)), \time());
             $redirectResponse = $this->githubClient->redirect($scopes, [
                 'redirect_uri' => $this->generateUrl('oauth_github_check', [
                     'state_key_id' => $stateKeyId,

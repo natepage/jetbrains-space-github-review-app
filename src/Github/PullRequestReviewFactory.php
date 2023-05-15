@@ -7,7 +7,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class PullRequestReviewFactory
 {
-    private const URL = 'https://api.github.com/repos/eonx-com/%s/pulls/%s/reviews';
+    private const CREATE_REVIEW_URL = 'https://api.github.com/repos/eonx-com/%s/pulls/%s/reviews';
+
+    private const FETCH_PULL_REQUEST_URL = 'https://api.github.com/repos/eonx-com/%s/pulls/%s';
 
     public function __construct(
         private readonly string $githubAccessToken,
@@ -17,31 +19,65 @@ final class PullRequestReviewFactory
 
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     public function createReview(array $data, GithubAccessToken $accessToken): void
     {
-        $url = \sprintf(self::URL, $data['github']['repository'], $data['github']['id']);
+        $url = \sprintf(self::CREATE_REVIEW_URL, $data['github']['repository'], $data['github']['id']);
 
         try {
-            $this->sendRequest($accessToken->getAccessToken(), $url, $this->getBody($data, $accessToken->isDefault()));
+            $this->sendCreateReviewRequest($accessToken->getAccessToken(), $url, $this->getBody($data, $accessToken->isDefault()));
         } catch (\Throwable $throwable) {
-            $this->sendRequest($this->githubAccessToken, $url, $this->getBody($data, true));
+            $this->sendCreateReviewRequest($this->githubAccessToken, $url, $this->getBody($data, true));
         }
     }
 
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Exception
+     */
     private function getBody(array $data, bool $isDefaultToken): string
     {
-        $approved = $isDefaultToken ? 'Approved' : \sprintf('@%s approved', $data['github']['username']);
+        $approvalMessage = $isDefaultToken
+            ? \sprintf('@%s approved this change', $data['github']['username'])
+            : \array_rand(\array_flip(ApprovalMessagesInterface::MESSAGES));
 
-        return \sprintf(
-            "%s 👌 | [Space - %s](%s).",
-            $approved,
-            $data['space']['number'],
-            $data['space']['url'],
-        );
+        // Randomly thank author of the pull request
+        if (\random_int(0, 3) === 1) {
+            $pullRequest = $this->fetchPullRequest($data);
+            $approvalMessage = \sprintf("Thanks @%s. %s", $pullRequest['user']['login'], $approvalMessage);
+        }
+
+        $lines = [
+            \sprintf("%s" . \PHP_EOL, $approvalMessage),
+            \sprintf('- [X] Space Review: [%s](%s)', $data['space']['number'], $data['space']['url']),
+            '- [X] Reviewed against secure coding practices',
+        ];
+
+        return \implode(\PHP_EOL, $lines);
+    }
+
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    private function fetchPullRequest(array $data): array
+    {
+        $url = \sprintf(self::FETCH_PULL_REQUEST_URL, $data['github']['repository'], $data['github']['id']);
+
+        return $this->githubClient->request('GET', $url, [
+            'auth_bearer' => $this->githubAccessToken,
+        ])->toArray();
     }
 
     /**
@@ -50,7 +86,7 @@ final class PullRequestReviewFactory
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    private function sendRequest(string $accessToken, string $url, string $body): void
+    private function sendCreateReviewRequest(string $accessToken, string $url, string $body): void
     {
         // Call getHeaders() to trigger exception if request fails
         $this->githubClient->request('POST', $url, [

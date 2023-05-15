@@ -5,7 +5,7 @@ namespace App\Space;
 
 use App\Helper\NonEmptyStringHelper;
 
-final class WebhookPayloadValidator
+final class ChangesAcceptedWebhookPayloadValidator
 {
     public function __construct(private readonly string $spaceClientId)
     {

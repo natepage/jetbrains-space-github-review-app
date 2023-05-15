@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbe4c318081630b64675a47a2aea305b",
+    "content-hash": "01047f2c986df0b8d9b2fa4271eb68b8",
     "packages": [
         {
             "name": "async-aws/core",
@@ -634,6 +634,126 @@
             "support": {
                 "source": "https://github.com/eonx-com/easy-encryption/tree/4.3.17",
                 "issues": "https://github.com/eonx-com/easy-encryption/issues"
+            },
+            "time": "2023-04-12T03:22:52+00:00"
+        },
+        {
+            "name": "eonx-com/easy-event-dispatcher",
+            "version": "4.3.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eonx-com/easy-event-dispatcher.git",
+                "reference": "05c1ed9a314e7b1bf48e0c8704592ef2bc5263e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eonx-com/easy-event-dispatcher/zipball/05c1ed9a314e7b1bf48e0c8704592ef2bc5263e4",
+                "reference": "05c1ed9a314e7b1bf48e0c8704592ef2bc5263e4",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://repo.packagist.com/eonx-com/dists/%package%/%version%/r%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "laravel/lumen-framework": "^5.8 || ^6.0 || ^8.0",
+                "phpunit/phpunit": "^9.5 || ^10.0",
+                "symfony/symfony": "^5.4 || ^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "EonX\\EasyEventDispatcher\\": "src",
+                    "EonX\\EasyEventDispatcher\\Bridge\\Symfony\\": "src/Bridge/Symfony"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "EonX\\EasyEventDispatcher\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://repo.packagist.com/eonx-com/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Framework agnostic event dispatcher",
+            "support": {
+                "source": "https://github.com/eonx-com/easy-event-dispatcher/tree/4.3.18",
+                "issues": "https://github.com/eonx-com/easy-event-dispatcher/issues"
+            },
+            "time": "2023-05-03T09:36:54+00:00"
+        },
+        {
+            "name": "eonx-com/easy-http-client",
+            "version": "4.3.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eonx-com/easy-http-client.git",
+                "reference": "ebf76a68ed0ba6e33696b831598cedc498054cae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eonx-com/easy-http-client/zipball/ebf76a68ed0ba6e33696b831598cedc498054cae",
+                "reference": "ebf76a68ed0ba6e33696b831598cedc498054cae",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://repo.packagist.com/eonx-com/dists/%package%/%version%/r%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "eonx-com/easy-event-dispatcher": "^4.3.17",
+                "eonx-com/easy-utils": "^4.3.17",
+                "nesbot/carbon": "^2.22",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "bugsnag/bugsnag": "^3.19",
+                "doctrine/dbal": "^2.6",
+                "eonx-com/easy-lock": "^4.3.17",
+                "eonx-com/easy-webhook": "^4.3.17",
+                "laravel/lumen-framework": "^5.8 || ^6.0 || ^8.0",
+                "mockery/mockery": "^1.4",
+                "phpunit/phpunit": "^9.5",
+                "symfony/amazon-sqs-messenger": "^5.4 || ^6.0",
+                "symfony/symfony": "^5.4 || ^6.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "EonX\\EasyHttpClient\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "EonX\\EasyHttpClient\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://repo.packagist.com/eonx-com/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Utils around HTTP client",
+            "support": {
+                "source": "https://github.com/eonx-com/easy-http-client/tree/4.3.17",
+                "issues": "https://github.com/eonx-com/easy-http-client/issues"
             },
             "time": "2023-04-12T03:22:52+00:00"
         },

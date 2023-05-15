@@ -12,6 +12,9 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $githubAccessToken: '%env(GITHUB_ACCESS_TOKEN)%'
+            $githubAppId: '%env(GITHUB_APP_ID)%'
+            $githubAppInstallId: '%env(GITHUB_APP_INSTALL_ID)%'
+            $githubAppSecretKey: '%env(base64:GITHUB_APP_SECRET_KEY)%'
             $spaceClientId: '%env(SPACE_CLIENT_ID)%'
             $spaceClientSecret: '%env(SPACE_CLIENT_SECRET)%'
             Symfony\Contracts\Cache\CacheInterface $flysystemCache: '@App\Infrastructure\Cache\FlysystemCacheAdapter'

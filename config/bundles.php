@@ -7,4 +7,6 @@ return [
     EonX\EasyEncryption\Bridge\Symfony\EasyEncryptionSymfonyBundle::class => ['all' => true],
     EonX\EasyUtils\Bridge\Symfony\EasyUtilsSymfonyBundle::class => ['all' => true],
     EonX\EasyBugsnag\Bridge\Symfony\EasyBugsnagSymfonyBundle::class => ['all' => true],
+    EonX\EasyEventDispatcher\Bridge\Symfony\EasyEventDispatcherSymfonyBundle::class => ['all' => true],
+    EonX\EasyHttpClient\Bridge\Symfony\EasyHttpClientSymfonyBundle::class => ['all' => true],
 ];

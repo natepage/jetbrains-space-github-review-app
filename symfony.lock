@@ -2,6 +2,9 @@
     "eonx-com/easy-bugsnag": {
         "version": "4.3.17"
     },
+    "eonx-com/easy-event-dispatcher": {
+        "version": "4.3.18"
+    },
     "eonx-com/easy-utils": {
         "version": "4.3.17"
     },

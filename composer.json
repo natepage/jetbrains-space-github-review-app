@@ -10,6 +10,7 @@
         "bref/bref": "^2.0",
         "eonx-com/easy-bugsnag": "*",
         "eonx-com/easy-encryption": "^4.3",
+        "eonx-com/easy-http-client": "^4.3",
         "firebase/php-jwt": "^6.4",
         "knpuniversity/oauth2-client-bundle": "^2.14",
         "league/flysystem-async-aws-s3": "^3.13",

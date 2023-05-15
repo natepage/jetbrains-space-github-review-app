@@ -1,0 +1,2 @@
+easy_http_client:
+    decorate_default_client: true

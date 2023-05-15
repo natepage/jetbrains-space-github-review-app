@@ -49,17 +49,26 @@ final class PullRequestReviewFactory
             ? \sprintf('@%s approved this change', $data['github']['username'])
             : \array_rand(\array_flip(ApprovalMessagesInterface::MESSAGES));
 
+        // Prevent create review for your own PR
+        $pullRequest = $this->fetchPullRequest($data);
+        if ($pullRequest['user']['login'] === $data['github']['username']) {
+            throw new \Exception('You cannot approve your own PR');
+        }
+
         // Randomly thank author of the pull request
         if (\random_int(0, 3) === 1) {
-            $pullRequest = $this->fetchPullRequest($data);
             $approvalMessage = \sprintf("Thanks @%s. %s", $pullRequest['user']['login'], $approvalMessage);
         }
 
-        $lines = [
-            \sprintf("%s" . \PHP_EOL, $approvalMessage),
-            \sprintf('- [X] Space Review: [%s](%s)', $data['space']['number'], $data['space']['url']),
-            '- [X] Reviewed against secure coding practices',
-        ];
+        $lines = \array_map(static fn (string $line): string => \sprintf('- [X] %s', $line), [
+            'Functionality and requirements',
+            'Code organization and structure',
+            'Code readability and maintainability',
+            'Error handling and exception management',
+            'Security considerations (POL-015)',
+        ]);
+
+        \array_unshift($lines, \sprintf("%s" . \PHP_EOL, $approvalMessage));
 
         return \implode(\PHP_EOL, $lines);
     }

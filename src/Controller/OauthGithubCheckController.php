@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Helper\NonEmptyStringHelper;
 use EonX\EasyEncryption\Interfaces\EncryptorInterface;
 use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
 use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
@@ -26,6 +27,10 @@ final class OauthGithubCheckController extends AbstractController
     {
         return $this->handleApiResponse(function () use ($request): Response {
             $stateKeyId = $request->query->get('state_key_id');
+            if (NonEmptyStringHelper::valid((string)($stateKeyId ?? '')) === false) {
+                throw new \RuntimeException('Missing state key id');
+            }
+
             $state = $this->flysystemCache->get($stateKeyId, function (ItemInterface $item): ?string {
                 $item->expiresAfter(5);
 

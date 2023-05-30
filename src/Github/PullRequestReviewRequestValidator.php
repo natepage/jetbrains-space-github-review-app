@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Github;
 
+use App\Github\Exceptions\NonBlockingValidationException;
 use App\Helper\NonEmptyStringHelper;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,13 +19,13 @@ final class PullRequestReviewRequestValidator extends AbstractWebhookRequestVali
     protected function doValidateRequest(Request $request): array
     {
         if ($request->headers->get('x-github-event') !== self::EVENT_NAME) {
-            throw new \RuntimeException('Invalid event name');
+            throw new NonBlockingValidationException('Invalid event name');
         }
 
         $payload = $request->toArray();
 
         if (\in_array(($payload['action'] ?? ''), self::SUPPORTED_ACTIONS, true) === false) {
-            throw new \RuntimeException('Invalid action');
+            throw new NonBlockingValidationException('Invalid action');
         }
 
         if (NonEmptyStringHelper::valid((string)($payload['review']['id'] ?? '')) === false) {

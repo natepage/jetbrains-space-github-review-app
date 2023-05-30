@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Github;
 
+use App\Github\Exceptions\CannotApproveOwnPrException;
 use App\Helper\NonEmptyStringHelper;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -48,7 +49,7 @@ final class PullRequestReviewBodyFactory
 
         // Prevent create review for your own PR
         if ($pullRequestAuthor === $data['github']['username']) {
-            throw new \Exception('You cannot approve your own PR');
+            throw new CannotApproveOwnPrException('You cannot approve your own PR');
         }
 
         // Randomly thank author of the pull request

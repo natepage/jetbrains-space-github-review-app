@@ -10,11 +10,14 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 final class PullRequestReviewBodyFactory
 {
     private const CODE_REVIEW_CHECKLIST = [
-        'Functionality and requirements',
-        'Code organization and structure',
-        'Code readability and maintainability',
-        'Error handling and exception management',
-        'Security considerations (POL-015)',
+        'Protect from Injection attacks',
+        'Protect data with proper input validation, and protect against buffer overflows, pointers/shared data',
+        'Protect with appropriate encryption and cryptography (E.g. Appropriate hashing, symmetric encryption used, ciphers) if applicable',
+        'Protect against XSS and CSRF',
+        'Ensure that pages, data access etc, are written with appropriate access control authorisation and authentication requirements',
+        'Ensure all important errors and business logic cases are handled',
+        'Ensure forwards and redirects are handled',
+        'Ensure no sensitive data is exposed and appropriate logging in place as required',
     ];
 
     private const FETCH_PULL_REQUEST_URL = 'https://api.github.com/repos/eonx-com/%s/pulls/%s';
@@ -57,9 +60,18 @@ final class PullRequestReviewBodyFactory
             $approvalMessage = \sprintf("Thanks @%s. %s", $pullRequestAuthor, $approvalMessage);
         }
 
-        $lines = \array_map(static fn (string $line): string => \sprintf('- [X] %s', $line), self::CODE_REVIEW_CHECKLIST);
+        $lines = [
+            $approvalMessage,
+            \PHP_EOL,
+            'Secure code in this PR has been written to best practice standards and covers the following as a minimum. Please ticket if coded this way (also tick if not relevant to this code change):',
+        ];
 
-        \array_unshift($lines, \sprintf("%s" . \PHP_EOL, $approvalMessage));
+        foreach (self::CODE_REVIEW_CHECKLIST as $check) {
+            $lines[] = \sprintf('- [X] %s', $check);
+        }
+
+        $lines[] = \PHP_EOL;
+        $lines[] = 'See procedure for more details: [PROC-010 Secure Coding Practices](https://eonx.atlassian.net/wiki/spaces/IMS/pages/689341460/PROC-010+Secure+Coding+Practices)';
 
         return \implode(\PHP_EOL, $lines);
     }
